@@ -1,18 +1,14 @@
 package com.example.festie_backend.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Column;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Setter
 @Getter
 @Entity
+@Table(name = "\"event\"")
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,20 +16,16 @@ public class Event {
 
     private String name;
     private String location;
-
-    @Column(name = "event_date") // Nombre de la columna en la base de datos
-    private LocalDateTime date; // Fecha y hora del evento
+    private Date date;
     private String url;
 
     private double price;
     private String image;
 
-    // Constructor por defecto
     public Event() {
     }
 
-    // Constructor con parámetros
-    public Event(Long id, String name, String location, LocalDateTime date,
+    public Event(Long id, String name, String location, Date date,
                  String url, double price, String image) {
         this.id = id;
         this.name = name;
