@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RestController
+@RequestMapping("/api/events")
 public class EventController {
     private final EventService eventService;
 
@@ -14,7 +16,6 @@ public class EventController {
         this.eventService = eventService;
     }
 
-    //Obtener todos los eventos
     @GetMapping
     public ResponseEntity<List<Event>>  getAllEvents (){
         List<Event> events = eventService.getAllEvents();
@@ -24,7 +25,6 @@ public class EventController {
         return ResponseEntity.ok(events); // 200 OK con lista de eventos
     }
 
-    //Obtener un evento por su id
     @GetMapping("/{id}")
     public ResponseEntity<Event> getEventById (@PathVariable Long id) {
         return eventService.getEventById(id)
@@ -32,14 +32,12 @@ public class EventController {
                 .orElse(ResponseEntity.notFound().build()); //404
     }
 
-    //Crear un nuevo evento
     @PostMapping
     public ResponseEntity<Event> createEvent(@RequestBody Event event){
         Event createdEvent = eventService.saveEvent(event);
         return ResponseEntity.ok(createdEvent); //200 OK con el evento creado
     }
 
-    //Actualizar un evento existente
     @PutMapping("/{id}")
     public ResponseEntity<Event> updateEvent(@PathVariable Long id, @RequestBody Event eventDetails){
         return eventService.updateEvent(id, eventDetails)
@@ -47,7 +45,7 @@ public class EventController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    //Eliminar un evento por id
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEventById(@PathVariable Long id){
         if(eventService.deleteEventById(id)) {
             return ResponseEntity.noContent().build(); // 204 No Content si se elimina correctamente
