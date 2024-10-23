@@ -32,6 +32,12 @@ public class EventController {
                 .orElse(ResponseEntity.notFound().build()); //404
     }
 
+    @GetMapping("/upcoming")
+    public ResponseEntity<List<Event>> getUpcomingEvents() {
+        List<Event> upcomingEvents = eventService.getUpcomingEvents();
+        return ResponseEntity.ok(upcomingEvents);
+    }
+
     @PostMapping
     public ResponseEntity<Event> createEvent(@RequestBody Event event){
         Event createdEvent = eventService.saveEvent(event);
