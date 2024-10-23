@@ -11,7 +11,7 @@ import java.util.Optional;
 public class EventService {
     private final EventRepository eventRepository;
 
-    //Constructor
+
     public EventService(EventRepository eventRepository) {
         this.eventRepository = eventRepository;
     }
