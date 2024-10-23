@@ -4,6 +4,7 @@ import com.example.festie_backend.model.Event;
 import com.example.festie_backend.repository.EventRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,5 +48,12 @@ public class EventService {
             return true;
         }
         return false;
+    }
+
+    public List<Event> getUpcomingEvents() {
+
+        Date today = new Date();
+
+        return eventRepository.findByDateAfterOrderByDateAsc(today);
     }
 }
