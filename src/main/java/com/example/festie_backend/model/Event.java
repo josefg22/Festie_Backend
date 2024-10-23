@@ -10,17 +10,15 @@ import java.util.Date;
 @Entity
 @Table(name = "\"event\"")
 public class Event {
+    private Date date;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String name;
-    private String location;
-    private Date date;
-    private String url;
-
-    private double price;
     private String image;
+    private String location;
+    private String name;
+    private double price;
+    private String url;
 
     public Event() {
     }

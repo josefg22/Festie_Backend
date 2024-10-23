@@ -9,20 +9,20 @@ import lombok.Setter;
 @Entity
 @Table(name = "\"post\"")
 public class Post {
+    @ManyToOne
+    @JoinColumn(name = "event_id",
+            referencedColumnName = "id")
+    private Event event;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String image;
+    private String media_url;
 
     @ManyToOne
     @JoinColumn(name = "user_id",
     referencedColumnName = "id")
     private User user;
-
-    @ManyToOne
-    @JoinColumn(name = "event_id",
-    referencedColumnName = "id")
-    private Event event;
-    private String media_url;
-    private String image;
-
 }
