@@ -53,4 +53,8 @@ public class UserController {
         }
         return ResponseEntity.badRequest().build();
     }
+    @GetMapping("/{id}/friends")
+    public List<User> getFriendsOfUser(@PathVariable Long id) {
+        return userService.getFriendsOfUser(id);
+    }
 }
