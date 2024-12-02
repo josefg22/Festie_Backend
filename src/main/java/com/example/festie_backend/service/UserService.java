@@ -2,8 +2,10 @@ package com.example.festie_backend.service;
 
 import com.example.festie_backend.model.User;
 import com.example.festie_backend.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +17,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    @Transactional
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
@@ -43,13 +46,23 @@ public class UserService {
         return user.getFriends().contains(friend);
     }
     public boolean addFriend(Long userId, Long friendId) {
-        Optional<User> user = userRepository.findById(userId);
-        Optional<User> friend = userRepository.findById(friendId);
+        Optional<User> userOpt = userRepository.findById(userId);
+        Optional<User> friendOpt = userRepository.findById(friendId);
 
-        if (user.isPresent() && friend.isPresent()) {
-            user.get().addFriend(friend.get());
-            userRepository.save(user.get());
-            userRepository.save(friend.get());
+        if (userOpt.isPresent() && friendOpt.isPresent()) {
+            User user = userOpt.get();
+            User friend = friendOpt.get();
+
+            if (!user.getFriends().contains(friend)) {
+                user.getFriends().add(friend);
+            }
+
+            if (!friend.getFriends().contains(user)) {
+                friend.getFriends().add(user);
+            }
+
+            userRepository.save(user);
+            userRepository.save(friend);
             return true;
         }
         return false;
@@ -66,11 +79,9 @@ public class UserService {
         }
         return false;
     }
-    public List<User> getFriendsOfUser(Long userId) {
-        Optional<User> user = userRepository.findById(userId);
-        if (user.isPresent()) {
-            return user.get().getFriends();
-        }
-        return null;
+    public List<User> getFriendsOfUser(Long id) {
+        return userRepository.findById(id)
+                .map(User::getFriends)
+                .orElse(Collections.emptyList());
     }
 }

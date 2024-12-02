@@ -6,7 +6,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -29,6 +32,20 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "friend_id")
     )
     private List<User> friends;
+    @ManyToMany(mappedBy = "friends")
+    private List<User> inverseFriends = new ArrayList<>();
+
+    // Método para obtener amigos bidireccionales
+    public List<User> getAllFriends() {
+        Set<User> allFriends = new HashSet<>(friends);
+        allFriends.addAll(inverseFriends);
+        return new ArrayList<>(allFriends);
+    }
+
+
+
+
+
     public void addFriend(User friend) {
         this.friends.add(friend);
         friend.getFriends().add(this);
