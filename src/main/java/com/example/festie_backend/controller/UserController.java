@@ -38,4 +38,19 @@ public class UserController {
         userService.deleteUserById(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/{userId}/friends/{friendId}")
+    public ResponseEntity<Void> addFriend(@PathVariable Long userId, @PathVariable Long friendId) {
+        if (userService.addFriend(userId, friendId)) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().build();
+    }
+    @DeleteMapping("/{userId}/friends/{friendId}")
+    public ResponseEntity<Void> removeFriend(@PathVariable Long userId, @PathVariable Long friendId) {
+        if (userService.removeFriend(userId, friendId)) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.badRequest().build();
+    }
 }

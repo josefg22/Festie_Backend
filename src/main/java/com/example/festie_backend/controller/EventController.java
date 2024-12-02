@@ -44,6 +44,17 @@ public class EventController {
         return ResponseEntity.ok(createdEvent); //200 OK con el evento creado
     }
 
+    @PostMapping("/{eventId}/send/{friend_id}")
+    public ResponseEntity<Void> sendEventToFriend(
+            @PathVariable Long eventId,
+            @RequestParam Long senderId,
+            @RequestParam Long receiverId) {
+        if (eventService.sendEventToFriend(eventId, senderId, receiverId)) {
+            return ResponseEntity.ok().build(); // 200 OK si se envía correctamente
+        }
+        return ResponseEntity.badRequest().build(); // 400 Bad Request si algo falla
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Event> updateEvent(@PathVariable Long id, @RequestBody Event eventDetails){
         return eventService.updateEvent(id, eventDetails)

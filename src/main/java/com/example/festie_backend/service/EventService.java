@@ -1,7 +1,9 @@
 package com.example.festie_backend.service;
 
 import com.example.festie_backend.model.Event;
+import com.example.festie_backend.model.User;
 import com.example.festie_backend.repository.EventRepository;
+import com.example.festie_backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -11,10 +13,14 @@ import java.util.Optional;
 @Service
 public class EventService {
     private final EventRepository eventRepository;
+    private final UserRepository userRepository;
+    private final UserService userService;
 
 
-    public EventService(EventRepository eventRepository) {
+    public EventService(EventRepository eventRepository, UserRepository userRepository, UserService userService) {
         this.eventRepository = eventRepository;
+        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     // Obtener todos los eventos
@@ -55,5 +61,16 @@ public class EventService {
         Date today = new Date();
 
         return eventRepository.findByDateAfterOrderByDateAsc(today);
+    }
+
+    public boolean sendEventToFriend(Long eventId, Long senderId, Long receiverId) {
+        Optional<Event> event = eventRepository.findById(eventId);
+        if (event.isEmpty()) {
+            return false;
+        }
+        if (!userService.areFriends(senderId, receiverId)) {
+            return false;
+        }
+        return true;
     }
 }

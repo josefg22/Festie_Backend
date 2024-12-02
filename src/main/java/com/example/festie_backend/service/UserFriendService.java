@@ -30,4 +30,10 @@ public class UserFriendService {
     public void deleteUserFriendById(Long id){
         userFriendRepository.deleteById(id);
     }
+
+    public boolean areFriends(Long userId, Long friendId) {
+        return userFriendRepository.existsByUserIdAndFriendId(userId, friendId) ||
+                userFriendRepository.existsByUserIdAndFriendId(friendId, userId);
+    }
+
 }
