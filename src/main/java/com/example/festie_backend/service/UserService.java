@@ -30,4 +30,47 @@ public class UserService {
     public void deleteUserById(Long id) {
         userRepository.deleteById(id);
     }
+    public boolean areFriends(Long userId, Long friendId) {
+        Optional<User> userOpt = userRepository.findById(userId);
+        Optional<User> friendOpt = userRepository.findById(friendId);
+        if (userOpt.isEmpty() || friendOpt.isEmpty()) {
+            return false;
+        }
+
+        User user = userOpt.get();
+        User friend = friendOpt.get();
+
+        return user.getFriends().contains(friend);
+    }
+    public boolean addFriend(Long userId, Long friendId) {
+        Optional<User> user = userRepository.findById(userId);
+        Optional<User> friend = userRepository.findById(friendId);
+
+        if (user.isPresent() && friend.isPresent()) {
+            user.get().addFriend(friend.get());
+            userRepository.save(user.get());
+            userRepository.save(friend.get());
+            return true;
+        }
+        return false;
+    }
+    public boolean removeFriend(Long userId, Long friendId) {
+        Optional<User> user = userRepository.findById(userId);
+        Optional<User> friend = userRepository.findById(friendId);
+
+        if (user.isPresent() && friend.isPresent()) {
+            user.get().removeFriend(friend.get());
+            userRepository.save(user.get());
+            userRepository.save(friend.get());
+            return true;
+        }
+        return false;
+    }
+    public List<User> getFriendsOfUser(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent()) {
+            return user.get().getFriends();
+        }
+        return null;
+    }
 }
