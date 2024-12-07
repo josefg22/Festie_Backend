@@ -28,7 +28,7 @@ public class UserController {
 
         // Mapear los amigos del usuario
         List<FriendsDTO> friends = user.getFriends().stream()
-                .map(friend -> new FriendsDTO(friend.getId(), friend.getName()))
+                .map(friend -> new FriendsDTO(friend.getId(), friend.getName(), friend.getNick()))
                 .collect(Collectors.toList());
         userDTO.setFriends(friends);
 
@@ -102,7 +102,7 @@ public class UserController {
 
                     // Obtener todos los amigos bidireccionales
                     List<FriendsDTO> friends = user.getAllFriends().stream()
-                            .map(friend -> new FriendsDTO(friend.getId(), friend.getName()))
+                            .map(friend -> new FriendsDTO(friend.getId(), friend.getName(), friend.getNick()))
                             .collect(Collectors.toList());
 
                     // Asignar amigos al DTO

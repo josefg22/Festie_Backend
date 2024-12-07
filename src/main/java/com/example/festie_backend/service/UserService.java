@@ -1,5 +1,6 @@
 package com.example.festie_backend.service;
 
+import com.example.festie_backend.dto.FriendsDTO;
 import com.example.festie_backend.model.User;
 import com.example.festie_backend.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -79,9 +81,12 @@ public class UserService {
         }
         return false;
     }
-    public List<User> getFriendsOfUser(Long id) {
+    public List<FriendsDTO> getFriendsOfUser(Long id) {
         return userRepository.findById(id)
-                .map(User::getFriends)
-                .orElse(Collections.emptyList());
+                .map(User::getAllFriends)
+                .orElseThrow(() -> new RuntimeException("User not found"))
+                .stream()
+                .map(friend -> new FriendsDTO(friend.getId(), friend.getName(), friend.getNick()))
+                .collect(Collectors.toList());
     }
 }
