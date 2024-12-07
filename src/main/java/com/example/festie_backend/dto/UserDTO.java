@@ -11,6 +11,7 @@ import java.util.List;
 public class UserDTO {
     private Long id;
     private String name;
+    private String nick;
     private String email;
     private Date birthday;
     private List<FriendsDTO> friends;
@@ -18,9 +19,10 @@ public class UserDTO {
     public UserDTO() {
     }
 
-    public UserDTO(Long id, String name, String email, Date birthday,List<FriendsDTO> friends) {
+    public UserDTO(Long id, String name,String nick, String email, Date birthday,List<FriendsDTO> friends) {
         this.id = id;
         this.name = name;
+        this.nick = nick;
         this.email = email;
         this.birthday = birthday;
         this.friends = friends;
