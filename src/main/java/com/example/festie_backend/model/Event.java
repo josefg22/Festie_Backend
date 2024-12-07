@@ -11,27 +11,27 @@ import java.util.Date;
 @Table(name = "\"event\"")
 public class Event {
     private Date date;
+    private String description;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String image;
-    private String latitude;
-    private String longitude;
+    private String location;
     private String name;
     private double price;
-    private String url;
+    private String latitude;
+    private String longitude;
 
     public Event() {
     }
 
     public Event(Long id, String name, String latitude, String longitude, Date date,
-                 String url, double price, String image) {
+                 double price, String image) {
         this.id = id;
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
         this.date = date;
-        this.url = url;
         this.price = price;
         this.image = image;
     }

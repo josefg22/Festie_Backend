@@ -1,10 +1,13 @@
 package com.example.festie_backend.service;
 
+import com.example.festie_backend.dto.EventDTO;
 import com.example.festie_backend.model.Event;
 import com.example.festie_backend.model.User;
 import com.example.festie_backend.repository.EventRepository;
 import com.example.festie_backend.repository.UserRepository;
+import com.example.festie_backend.service.geocoding.GeoCodingService;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
 import java.util.List;
@@ -15,6 +18,8 @@ public class EventService {
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
     private final UserService userService;
+    @Autowired
+    private GeoCodingService geoCodingService;
 
 
     public EventService(EventRepository eventRepository, UserRepository userRepository, UserService userService) {
@@ -34,8 +39,20 @@ public class EventService {
     }
 
     // Guardar un nuevo evento
-    public Event saveEvent(Event event) {
-        return eventRepository.save(event); // La base de datos asignará el ID automáticamente
+    public Event saveEvent(EventDTO eventDTO) {
+        Event event = new Event();
+        event.setName(eventDTO.getName());
+        event.setLocation(eventDTO.getLocation());
+        event.setDate(eventDTO.getDate());
+        event.setPrice(eventDTO.getPrice());
+        event.setDescription(eventDTO.getDescription());
+        event.setImage(eventDTO.getImage());
+
+        String[] coordinates = geoCodingService.getCoordinates(eventDTO.getLocation());
+        event.setLatitude(coordinates[0]);
+        event.setLongitude(coordinates[1]);
+
+        return eventRepository.save(event);
     }
 
     // Actualizar un evento existente

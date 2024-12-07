@@ -1,5 +1,6 @@
 package com.example.festie_backend.controller;
 
+import com.example.festie_backend.dto.EventDTO;
 import com.example.festie_backend.model.Event;
 import com.example.festie_backend.service.EventService;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +40,7 @@ public class EventController {
     }
 
     @PostMapping
-    public ResponseEntity<Event> createEvent(@RequestBody Event event){
+    public ResponseEntity<Event> createEvent(@RequestBody EventDTO event){
         Event createdEvent = eventService.saveEvent(event);
         return ResponseEntity.ok(createdEvent); //200 OK con el evento creado
     }
