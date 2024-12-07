@@ -34,7 +34,7 @@ public class PhotoService {
 
 
         byte[] imageData = file.getBytes();
-
+        //prueba
         Photo photo = new Photo();
         photo.setEvent(event);
         photo.setUser(user);
