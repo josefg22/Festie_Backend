@@ -43,7 +43,7 @@ public class SpotifyController {
         try {
             String accessToken = spotifyAuthService.getAccessToken();
             String artistId = spotifyApiService.getArtistId(accessToken, artistName);
-            String playlistUrl = spotifyApiService.getThisIsPlaylist(accessToken, artistId);
+            String playlistUrl = spotifyApiService.getThisIsPlaylist(accessToken, artistName);
             return playlistUrl != null ? "Playlist encontrada: " + playlistUrl : "No se encontró la playlist 'This Is' para este artista.";
         } catch (Exception e) {
             return "Error al obtener la playlist: " + e.getMessage();

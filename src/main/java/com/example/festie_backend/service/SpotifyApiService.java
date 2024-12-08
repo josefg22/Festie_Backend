@@ -73,12 +73,12 @@ public class SpotifyApiService {
      * @return URL de la playlist "This Is".
      * @throws IOException En caso de error con la API.
      */
-    public String getThisIsPlaylist(String accessToken, String artistId) throws IOException {
+    public String getThisIsPlaylist(String accessToken, String artistName) throws IOException {
         HttpUrl url = HttpUrl.parse(BASE_URL + "/search")
                 .newBuilder()
-                .addQueryParameter("q", "This Is " + artistId)
+                .addQueryParameter("q", "This Is " + artistName.trim()) // Búsqueda por nombre del artista
                 .addQueryParameter("type", "playlist")
-                .addQueryParameter("limit", "1")
+                .addQueryParameter("limit", "5") // Limitar a 5 resultados
                 .build();
 
         Request request = new Request.Builder()
@@ -87,29 +87,47 @@ public class SpotifyApiService {
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
+            String responseBody = response.body() != null ? response.body().string() : "{}";
+            System.out.println("Respuesta de la API: " + responseBody);
+
             if (!response.isSuccessful()) {
-                throw new IOException("Error al buscar la playlist: " + response);
+                throw new IOException("Error al buscar la playlist: " + responseBody);
             }
 
             // Parsear la respuesta JSON
-            Map<String, Object> data = objectMapper.readValue(response.body().string(), Map.class);
+            Map<String, Object> data = objectMapper.readValue(responseBody, Map.class);
 
-            // Obtener la lista de playlists desde "playlists.items"
+            // Extraer el nodo 'playlists'
             Map<String, Object> playlists = (Map<String, Object>) data.get("playlists");
-            List<Map<String, Object>> items = (List<Map<String, Object>>) playlists.get("items");
-
-            // Asegurarse de que la lista no esté vacía
-            if (items.isEmpty()) {
-                throw new IOException("No se encontraron playlists con el nombre 'This Is'.");
+            if (playlists == null) {
+                throw new IOException("No se encontraron playlists en la respuesta.");
             }
 
-            // Tomar la primera playlist de la lista
-            Map<String, Object> playlist = items.get(0);
+            // Extraer la lista de 'items'
+            List<Map<String, Object>> items = (List<Map<String, Object>>) playlists.get("items");
+            if (items == null || items.isEmpty()) {
+                return "No se encontraron playlists para 'This Is " + artistName + "'.";
+            }
 
-            // Obtener la URL de la playlist desde "external_urls.spotify"
+            // Filtrar elementos nulos en la lista
+            items = items.stream().filter(item -> item != null).toList();
+
+            if (items.isEmpty()) {
+                return "No se encontraron playlists válidas para 'This Is " + artistName + "'.";
+            }
+
+            // Obtener la primera playlist válida
+            Map<String, Object> playlist = items.get(0);
             Map<String, String> externalUrls = (Map<String, String>) playlist.get("external_urls");
+
+            if (externalUrls == null || !externalUrls.containsKey("spotify")) {
+                throw new IOException("La playlist no contiene una URL válida.");
+            }
+
+            // Retornar la URL de Spotify de la primera playlist válida
             return externalUrls.get("spotify");
         }
     }
+
 }
 
