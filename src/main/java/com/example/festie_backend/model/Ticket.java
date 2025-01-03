@@ -18,7 +18,6 @@ public class Ticket {
     private Long eventId;
     private double price;
     private LocalDateTime purchaseDate;
-    private String externalTicketId;
 
     // Getters y setters
     public Long getId() {
@@ -59,14 +58,6 @@ public class Ticket {
 
     public void setPurchaseDate(LocalDateTime purchaseDate) {
         this.purchaseDate = purchaseDate;
-    }
-
-    public String getExternalTicketId() {
-        return externalTicketId;
-    }
-
-    public void setExternalTicketId(String externalTicketId) {
-        this.externalTicketId = externalTicketId;
     }
 }
 

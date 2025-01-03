@@ -20,7 +20,6 @@ public class TicketController {
         this.ticketService = ticketService;
     }
 
-    // Endpoint para comprar entradas
     @PostMapping("/buy")
     public ResponseEntity<?> buyTicket(@RequestBody TicketPurchaseRequest request) {
         boolean isBought = ticketService.hasTicket(request.getUserId(), request.getEventId());
@@ -29,11 +28,10 @@ public class TicketController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("You already own this ticket.");
         }
 
-        ticketService.buyTicket(request.getUserId(), request.getEventId(), request.getExternalTicketId());
+        ticketService.buyTicket(request.getUserId(), request.getEventId());
         return ResponseEntity.ok("Ticket purchased successfully.");
     }
 
-    // Endpoint para obtener las entradas compradas por un usuario
     @GetMapping
     public ResponseEntity<List<Ticket>> getUserTickets(@RequestParam Long userId) {
         List<Ticket> tickets = ticketService.getTicketsByUserId(userId);

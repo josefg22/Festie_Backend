@@ -20,12 +20,11 @@ public class TicketService {
         return ticketRepository.existsByUserIdAndEventId(userId, eventId);
     }
 
-    public void buyTicket(Long userId, Long eventId, String externalTicketId) {
+    public void buyTicket(Long userId, Long eventId) {
         Ticket ticket = new Ticket();
         ticket.setUserId(userId);
         ticket.setEventId(eventId);
-        ticket.setPrice(0.0); // Puedes ajustar este valor según sea necesario.
-        ticket.setExternalTicketId(externalTicketId);
+        ticket.setPrice(0.0);
         ticket.setPurchaseDate(LocalDateTime.now());
         ticketRepository.save(ticket);
     }
